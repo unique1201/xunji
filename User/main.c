@@ -7,7 +7,7 @@
 #include "Trace.h"
 
 
-int key,page=1,speed=0,start=0;
+int key,page=1,speed=50,start=0,op=1;
 
 
 int main()
@@ -16,29 +16,34 @@ int main()
 	PWM_Init();
 	Motor_Init();
 	Key_Init();
+	OLED_ShowString(1,1,"->SpeedControl");
+	OLED_ShowString(2,1,"Start");
 	
 
 	while (1)
 	{
-		OLED_ShowString(1,1,"->SpeedControl");
-		OLED_ShowString(2,1,"Start");
 		key=Key_GetNum();
 		if (start==0)
 		{	//菜单
-			if (key==1 && page == 1)
+			if (key==1 && page == 1 ||
+				op==1)
 			{
+				OLED_Clear();
 				OLED_ShowString(1,1,"SpeedControl");
 				OLED_ShowString(2,1,"->Start");
 				page=2;
+				op=0;
 			}
 			else if (key == 1 && page == 2)
 			{
+				OLED_Clear();
 				OLED_ShowString(1,1,"->SpeedControl");
 				OLED_ShowString(2,1,"Start");
 				page=1;
 			}
 			else if (key == 2 && page == 1)
 			{
+				OLED_Clear();
 				OLED_ShowString(1,1,"SpeedControl  E");
 				OLED_ShowString(2,1,"Speed:");
 				OLED_ShowNum(2,6,speed,5);
@@ -46,14 +51,25 @@ int main()
 			}
 			else if (key == 2 && page == 2)
 			{
+				OLED_Clear();
 				start=1;
 			}
 			else if (page == 3 && key == 1)
 			{
+				OLED_Clear();
 				speed=(speed+10)%100;
+				OLED_ShowString(1,1,"SpeedControl  E");
+				OLED_ShowString(2,1,"Speed:");
+				OLED_ShowNum(2,6,speed,5);
 			}
 			else if (page == 3 && key == 3)
 			{
+				OLED_Clear();
+				op=1;
+			}
+			else if (page == 3 && key == 3)
+			{
+				OLED_Clear();
 				page=1;
 				OLED_ShowString(1,1,"->SpeedControl");
 				OLED_ShowString(2,1,"Start");
