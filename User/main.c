@@ -52,6 +52,7 @@ int main()
 			else if (key == 2 && page == 2)
 			{
 				OLED_Clear();
+				Delay_s(2);
 				start=1;
 			}
 			else if (page == 3 && key == 1)
