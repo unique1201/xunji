@@ -25,8 +25,7 @@ int main()
 		key=Key_GetNum();
 		if (start==0)
 		{	//菜单
-			if (key==1 && page == 1 ||
-				op==1)
+			if ((key==1 && page == 1) || op==1)
 			{
 				OLED_Clear();
 				OLED_ShowString(1,1,"SpeedControl");
