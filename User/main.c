@@ -16,9 +16,11 @@ int main()
 	PWM_Init();
 	Motor_Init();
 	Key_Init();
+	TrackingSensor_Init();
 	OLED_ShowString(1,1,"->SpeedControl");
 	OLED_ShowString(2,1,"Start");
-	
+	char state;
+	state=TrackingSensor_GetState();
 
 	while (1)
 	{
@@ -57,7 +59,7 @@ int main()
 			else if (page == 3 && key == 1)
 			{
 				OLED_Clear();
-				speed=(speed+10)%100;
+				speed=(speed+5)%100;
 				OLED_ShowString(1,1,"SpeedControl  E");
 				OLED_ShowString(2,1,"Speed:");
 				OLED_ShowNum(2,6,speed,5);
@@ -79,7 +81,9 @@ int main()
 		}
 		else
 		{
-			char state=TrackingSensor_GetState();
+			
+			state=TrackingSensor_GetState();
+			
 			if (state==TRACK_FORWARD || state==TRACK_CROSS_ROAD)
 			{
 				Motor_SetSpeed1(speed);
@@ -87,28 +91,37 @@ int main()
 			}
 			else if (state==TRACK_TURN_LEFT_SLOW)
 			{
-				Motor_SetSpeed1(-50);
-				Motor_SetSpeed2(50);
+				Motor_SetSpeed2(-50);
+				Motor_SetSpeed1(50);
+				Delay_ms(1);
+
 			}
 			else if (state==TRACK_TURN_LEFT_FAST)
 			{
-				Motor_SetSpeed1(speed-50);
-				Motor_SetSpeed2(speed);
+				Motor_SetSpeed2(-100);
+				Motor_SetSpeed1(100);
+				Delay_ms(1);
+
+				
 			}
 			else if (state==TRACK_TURN_RIGHT_SLOW)
 			{
 				Motor_SetSpeed1(-50);
 				Motor_SetSpeed2(50);
+				Delay_ms(1);
+
 			}
 			else if (state==TRACK_TURN_RIGHT_FAST)
 			{
-				Motor_SetSpeed1(speed-50);
-				Motor_SetSpeed2(speed);
+				Motor_SetSpeed1(-100);
+				Motor_SetSpeed2(100);
+				Delay_ms(1);
+				
 			}
 			else if (state==TRACK_LOST)
 			{
-				Motor_SetSpeed1(0);
-				Motor_SetSpeed2(0);
+				Motor_SetSpeed1(-40);
+				Motor_SetSpeed2(40);
 			}
 			
 		}
